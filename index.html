@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>夏季こおり | Official Site</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --white:   #FFFFFF;
+      --bg-sub:  #A8D8EA;
+      --ice:     #A8D8EA;
+      --ice-dim: #D6EEF7;
+      --text:    #1a1a1a;
+      --muted:   #6b7280;
+      --border:  #e5e9ec;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+      background: #A8D8EA;
+    }
+    .hero-crystals {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.85), rgba(168,216,234,0.18));
+      border: 1px solid rgba(168,216,234,0.55);
+      animation: floatBubble ease-in infinite;
+    }
+    @keyframes floatBubble {
+      0%   { transform: translateY(0) translateX(0);      opacity: 0; }
+      8%   { opacity: 1; }
+      88%  { opacity: 0.7; }
+      100% { transform: translateY(-105vh) translateX(var(--drift)); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bubble { animation: none; opacity: 0.25; }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+    }
+    .hero-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0.04em;
+      margin-bottom: 1.6rem;
+      position: relative;
+    }
+    .hero-name span {
+      background: linear-gradient(135deg, #ffffff 0%, #e8f7fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 3rem;
+    }
+    .hero-socials {
+      display: flex;
+      gap: 1.4rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 2rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .social-link:hover {
+      border-color: var(--ice);
+      color: var(--text);
+      background: var(--ice-dim);
+    }
+    .social-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+    .scroll-hint::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 2.5rem;
+      background: var(--ice);
+      animation: scrollLine 1.6s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(0); transform-origin: top; }
+      50%       { transform: scaleY(1); transform-origin: top; }
+    }
+
+    /* ── Sections ── */
+    section { padding: 7rem 2rem; }
+    .section-inner {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ice);
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+    .section-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 600;
+      margin-bottom: 2.5rem;
+      line-height: 1.4;
+    }
+    .divider {
+      width: 2.5rem;
+      height: 2px;
+      background: var(--ice);
+      margin: 1.2rem 0 2.5rem;
+    }
+
+    /* ── About ── */
+    #about { background: #ffffff; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-image-box {
+      aspect-ratio: 3/4;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .about-image-box span { writing-mode: vertical-rl; }
+    .about-body p + p { margin-top: 1.2rem; }
+    .about-body p {
+      font-size: 0.95rem;
+      color: #3a3a3a;
+      line-height: 2;
+    }
+    .about-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+    }
+    .tag {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.9rem;
+      background: var(--ice-dim);
+      border-radius: 2rem;
+      color: #3a7d9a;
+    }
+
+    /* ── Hashtags ── */
+    .hashtag-section { margin-top: 2rem; }
+    .hashtag-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ice);
+      margin-bottom: 0.9rem;
+      font-weight: 500;
+    }
+    .hashtag-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .hashtag-item {
+      display: flex;
+      align-items: baseline;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+    }
+    .hashtag {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--ice);
+      white-space: nowrap;
+    }
+    .hashtag-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── Links ── */
+    #links { background: var(--bg-sub); }
+    .links-grid { display: flex; flex-direction: column; gap: 1rem; }
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.4rem 1.6rem;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .link-card:hover {
+      background: rgba(255,255,255,0.85);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(100,180,210,0.2);
+    }
+    .link-card-icon {
+      width: 40px; height: 40px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #6b7280;
+    }
+    .link-card-body { flex: 1; }
+    .link-card-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+    .link-card-desc { font-size: 0.8rem; color: #555; line-height: 1.6; }
+    .link-card-arrow {
+      width: 18px; height: 18px;
+      color: var(--ice);
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    /* ── Works ── */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .work-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: box-shadow 0.25s, transform 0.25s;
+      background: var(--white);
+    }
+    .work-card:hover {
+      box-shadow: 0 8px 28px rgba(168,216,234,0.25);
+      transform: translateY(-3px);
+    }
+    .work-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--ice-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+    .work-info {
+      padding: 1rem 1.2rem;
+    }
+    .work-cat {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ice);
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+    .work-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .work-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── Contact ── */
+    #contact { background: var(--bg-sub); }
+    .contact-desc {
+      font-size: 0.95rem;
+      color: #3a3a3a;
+      margin-bottom: 2.5rem;
+      line-height: 2;
+    }
+    .form-group { margin-bottom: 1.6rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.9rem;
+      background: #fff;
+      color: var(--text);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #aaa; }
+    .form-group select option { background: #fff; color: #1a1a1a; }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--ice);
+    }
+    .form-group textarea { resize: vertical; min-height: 140px; }
+    .submit-btn {
+      display: inline-block;
+      padding: 0.8rem 2.8rem;
+      background: var(--ice);
+      color: var(--white);
+      border: none;
+      border-radius: 2rem;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .submit-btn:hover {
+      background: #6bbcdb;
+      transform: translateY(-1px);
+    }
+    #form-msg {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #3a7d9a;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .footer-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+    .footer-socials {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+    .footer-socials a {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+    }
+    .footer-socials a:hover { color: var(--text); }
+    .footer-copy {
+      font-size: 0.7rem;
+      color: #c0c8ce;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 680px) {
+      nav { padding: 1rem 1.4rem; }
+      .nav-links { gap: 1.4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .about-image-box { aspect-ratio: 4/3; }
+      .about-image-box span { writing-mode: unset; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <a href="#hero" class="nav-logo">夏季こおり</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <!-- Floating ice crystals (SVG) -->
+  <div class="hero-crystals" aria-hidden="true"></div>
+
+  <p class="hero-eyebrow">VTuber Official Site</p>
+  <h1 class="hero-name"><span>夏季こおり</span></h1>
+  <p class="hero-tagline">初めまして、また会えましたね。</p>
+
+  <div class="hero-socials">
+    <a class="social-link" href="https://youtube.com/@summer_ice_0206" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
+      YouTube
+    </a>
+    <a class="social-link" href="https://x.com/summer_ice_0206" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      X / Twitter
+    </a>
+    <a class="social-link" href="https://live.nicovideo.jp/watch/user/138406804" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l7 4.5-7 4.5z"/></svg>
+      ニコニコ
+    </a>
+    <a class="social-link" href="https://note.com/summer_ice_0206" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-4 14H8v-2h8v2zm0-4H8v-2h8v2zm0-4H8V6h8v2z"/></svg>
+      note
+    </a>
+  </div>
+
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label">About</p>
+    <h2 class="section-title">私について</h2>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div class="about-image-box">
+      <img src="20250721.png" alt="夏季こおり" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" />
+      </div>
+      <div class="about-body">
+        <p>はじめまして、夏季こおりです。</p>
+        <p>ここに自己紹介文が入ります。好きなこと、活動内容、雰囲気など、あなたらしい言葉で自由に書いてみてください。</p>
+        <p>配信では〇〇や△△を主にやっています。気軽に遊びにきてくれると嬉しいです。</p>
+        <div class="about-tags">
+          <span class="tag">ゲーム実況</span>
+          <span class="tag">雑談配信</span>
+          <span class="tag">歌ってみた</span>
+          <span class="tag">好きなもの①</span>
+          <span class="tag">好きなもの②</span>
+        </div>
+
+        <div class="hashtag-section">
+          <p class="hashtag-label">ハッシュタグ</p>
+          <div class="hashtag-list">
+            <div class="hashtag-item">
+              <span class="hashtag">#こおりぽーと</span>
+              <span class="hashtag-desc">配信告知タグ</span>
+            </div>
+            <div class="hashtag-item">
+              <span class="hashtag">#描きこおり</span>
+              <span class="hashtag-desc">ファンアートタグ</span>
+            </div>
+            <div class="hashtag-item">
+              <span class="hashtag">#ないしょのこおり</span>
+              <span class="hashtag-desc">配信NGタグ（スポイラー等にどうぞ）</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Works -->
+<section id="works">
+  <div class="section-inner">
+    <p class="section-label">Works</p>
+    <h2 class="section-title">活動・コンテンツ</h2>
+    <div class="divider"></div>
+    <div class="works-grid">
+      <div class="work-card">
+        <div class="work-thumb">サムネイル</div>
+        <div class="work-info">
+          <p class="work-cat">YouTube</p>
+          <p class="work-title">動画タイトルが入ります</p>
+          <p class="work-desc">動画の簡単な説明文がここに入ります。</p>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-thumb">サムネイル</div>
+        <div class="work-info">
+          <p class="work-cat">歌ってみた</p>
+          <p class="work-title">楽曲タイトルが入ります</p>
+          <p class="work-desc">楽曲の簡単な説明文がここに入ります。</p>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-thumb">サムネイル</div>
+        <div class="work-info">
+          <p class="work-cat">note</p>
+          <p class="work-title">記事タイトルが入ります</p>
+          <p class="work-desc">記事の簡単な説明文がここに入ります。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Links -->
+<section id="links">
+  <div class="section-inner">
+    <p class="section-label">Links</p>
+    <h2 class="section-title">その他のリンク</h2>
+    <div class="divider"></div>
+    <div class="links-grid">
+      <a class="link-card" href="https://marshmallow-qa.com/fyr5neiy1jsvjrm" target="_blank" rel="noopener">
+        <div class="link-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="32" height="32"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="link-card-body">
+          <p class="link-card-title">マシュマロ</p>
+          <p class="link-card-desc">匿名でメッセージを送れます。お気軽にどうぞ！</p>
+        </div>
+        <svg class="link-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </a>
+      <a class="link-card" href="https://gi-pt.com/main/wishlist/fan-view/3a2027d0-1123-5cab-c285-0e29e24486e3" target="_blank" rel="noopener">
+        <div class="link-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="32" height="32"><path d="M20 12v10H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        </div>
+        <div class="link-card-body">
+          <p class="link-card-title">ほしいものリスト</p>
+          <p class="link-card-desc">いつも応援ありがとうございます。気持ちだけで十分嬉しいです！</p>
+        </div>
+        <svg class="link-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-inner">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">お問い合わせ</h2>
+    <div class="divider"></div>
+    <p class="contact-desc">お仕事のご依頼・コラボのご相談など、お気軽にどうぞ。<br>内容を確認の上、順次ご連絡いたします。</p>
+    <div id="contact-form">
+      <div class="form-group">
+        <label for="name">お名前 / 企業名</label>
+        <input type="text" id="name" placeholder="山田 太郎" />
+      </div>
+      <div class="form-group">
+        <label for="email">メールアドレス</label>
+        <input type="email" id="email" placeholder="example@mail.com" />
+      </div>
+      <div class="form-group">
+        <label for="category">お問い合わせの種類</label>
+        <select id="category">
+          <option value="">選択してください</option>
+          <option>お仕事のご依頼</option>
+          <option>コラボのご相談</option>
+          <option>ファンレター</option>
+          <option>その他</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">メッセージ</label>
+        <textarea id="message" placeholder="メッセージをご記入ください"></textarea>
+      </div>
+      <button class="submit-btn" onclick="handleSubmit()">送信する</button>
+      <p id="form-msg"></p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p class="footer-name">夏季こおり</p>
+  <div class="footer-socials">
+    <a href="https://youtube.com/@summer_ice_0206" target="_blank" rel="noopener">YouTube</a>
+    <a href="https://x.com/summer_ice_0206" target="_blank" rel="noopener">X / Twitter</a>
+    <a href="https://live.nicovideo.jp/watch/user/138406804" target="_blank" rel="noopener">ニコニコ</a>
+    <a href="https://note.com/summer_ice_0206" target="_blank" rel="noopener">note</a>
+  </div>
+  <p class="footer-copy">&copy; 2025 夏季こおり. All rights reserved.</p>
+</footer>
+
+<script>
+  // ── Bubble generator (soda effect) ──
+  const container = document.querySelector('.hero-crystals');
+  const COUNT = 28;
+  for (let i = 0; i < COUNT; i++) {
+    const el = document.createElement('div');
+    el.className = 'bubble';
+    const size  = Math.random() * 18 + 6;          // 6〜24px
+    const left  = Math.random() * 100;
+    const delay = Math.random() * 10;
+    const dur   = Math.random() * 6 + 6;            // 6〜12s
+    const drift = (Math.random() - 0.5) * 60;       // 左右にゆらゆら
+    el.style.cssText = `
+      left: ${left}%;
+      bottom: -${size}px;
+      width: ${size}px;
+      height: ${size}px;
+      animation-duration: ${dur}s;
+      animation-delay: ${delay}s;
+      --drift: ${drift}px;
+    `;
+    container.appendChild(el);
+  }
+
+  // ── Nav active highlight on scroll ──
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => {
+          a.style.color = a.getAttribute('href') === '#' + entry.target.id
+            ? 'var(--text)' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => observer.observe(s));
+
+  // ── Contact form (Formspree) ──
+  async function handleSubmit() {
+    const name     = document.getElementById('name').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const category = document.getElementById('category').value;
+    const message  = document.getElementById('message').value.trim();
+    const msg      = document.getElementById('form-msg');
+
+    if (!name || !email || !category || !message) {
+      msg.style.color = '#d97070';
+      msg.textContent = 'すべての項目を入力してください。';
+      return;
+    }
+
+    const btn = document.querySelector('.submit-btn');
+    btn.disabled = true;
+    btn.textContent = '送信中…';
+    msg.textContent = '';
+
+    try {
+      const res = await fetch('https://formspree.io/f/mdavjoan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, email, category, message })
+      });
+      if (res.ok) {
+        msg.style.color = '#3a7d9a';
+        msg.textContent = 'ありがとうございます。メッセージを受け付けました。';
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('category').value = '';
+        document.getElementById('message').value = '';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      msg.style.color = '#d97070';
+      msg.textContent = '送信に失敗しました。時間をおいて再度お試しください。';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '送信する';
+    }
+  }
+</script>
+</body>
+</html>
